@@ -7,10 +7,11 @@ export async function signInAction(formData) {
     await signIn("credentials", {
       email: formData.email,
       password: formData.password,
-      // redirectTo: "/",
+      redirect: false,
     });
+    return { success: true }; 
   } catch (error) {
-     if (error?.type === "CredentialsSignin") {
+    if (error?.type === "CredentialsSignin") {
       return { error: "Invalid email or password" };
     }
     throw error;

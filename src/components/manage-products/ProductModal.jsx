@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-const COLOR_OPTIONS = ["green", "gray", "red", "blue", "white", "black", "pink", "yellow"];
+const COLOR_OPTIONS = ["green", "gray", "red", "blue", "white", "black", "pink", "yellow","purple"];
 const SIZE_OPTIONS  = ["s", "m", "l", "xl", "xxl", "xxxl"];
 
 

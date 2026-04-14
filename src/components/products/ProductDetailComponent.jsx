@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useCartStore } from "@/app/store/CartStore";
 import { rateProductAction } from "@/action/product.action";
+import { sileo } from "sileo";
 
 export default function ProductDetailView({ product, relatedProducts }) {
     const router = useRouter();
@@ -15,7 +16,18 @@ export default function ProductDetailView({ product, relatedProducts }) {
     const [currentRating, setCurrentRating] = useState(product.star || 0);
     const [hoverRating, setHoverRating] = useState(0);
     const [isPending, setIsPending] = useState(false);
-
+    const COLOR_MAP = {
+        green: "bg-green-500 text-white border-green-600",
+        gray: "bg-gray-500 text-white border-gray-600",
+        red: "bg-red-500 text-white border-red-600",
+        blue: "bg-blue-600 text-white border-blue-700",
+        white: "bg-white text-gray-900 border-gray-300",
+        black: "bg-black text-white border-black",
+        pink: "bg-pink-400 text-white border-pink-500",
+        yellow: "bg-yellow-400 text-gray-900 border-yellow-500",
+        purple: "bg-purple-500 text-white border-purple-600",
+        default: "bg-gray-200 text-gray-700 border-gray-300",
+    };
     const handleAddToCart = () => {
         addItem({
             productId: product.productId,
@@ -25,6 +37,16 @@ export default function ProductDetailView({ product, relatedProducts }) {
             selectedColor,
             selectedSize,
             quantity,
+        });
+        sileo.success({
+            title: "Added To Cart",
+            description: `${product.name} is in your cart`,
+            fill: "#171717",
+            position: "top-right",
+            styles: {
+                title: "text-white!",
+                description: "text-white/75!",
+            },
         });
     };
     const handleStarClick = async (rating) => {
@@ -128,33 +150,55 @@ export default function ProductDetailView({ product, relatedProducts }) {
 
                     <div className="mb-6">
                         <p className="text-sm font-semibold mb-3 text-gray-900">Choose a color</p>
-                        <div className="flex gap-2">
-                            {product.colors?.map((color) => (
-                                <button
-                                    key={color}
-                                    onClick={() => setSelectedColor(color)}
-                                    className={`px-5 py-1.5 rounded-full border text-sm font-medium transition-all ${selectedColor === color ? "border-blue-600 bg-blue-50 text-blue-600 shadow-sm" : "border-gray-200 text-gray-700 hover:bg-gray-50"
-                                        }`}
-                                >
-                                    {color}
-                                </button>
-                            ))}
+                        <div className="flex gap-2 flex-wrap">
+                            {product.colors?.map((color) => {
+                                const normalizedColor = color.toLowerCase();
+                                const isActive = selectedColor === color;
+
+                                const activeStyles = COLOR_MAP[normalizedColor] || COLOR_MAP.default;
+
+                                return (
+                                    <button
+                                        key={color}
+                                        onClick={() => setSelectedColor(color)}
+                                        className={`px-5 py-2 rounded-full border text-sm font-bold capitalize transition-all duration-200 ${isActive
+                                            ? `${activeStyles}  scale-105 shadow-md`
+                                            : "bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                                            }`}
+                                    >
+                                        {color}
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
 
                     <div className="mb-8">
                         <p className="text-sm font-semibold mb-3 text-gray-900">Choose a size</p>
-                        <div className="flex gap-3">
-                            {product.sizes?.map((size) => (
-                                <button
-                                    key={size}
-                                    onClick={() => setSelectedSize(size)}
-                                    className={`w-10 h-10 flex items-center justify-center rounded-full border text-sm font-bold transition-all ${selectedSize === size ? "border-blue-600 bg-blue-600 text-white" : "border-gray-200 text-gray-500 hover:bg-gray-50"
-                                        }`}
-                                >
-                                    {size}
-                                </button>
-                            ))}
+                        <div className="flex gap-2 flex-wrap">
+                            {product.sizes?.map((size) => {
+                                const isActive = selectedSize === size;
+
+                                return (
+                                    <button
+                                        key={size}
+                                        onClick={() => setSelectedSize(size)}
+                                        className={`flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm transition-all duration-150 ${isActive
+                                                ? "border-blue-600 bg-blue-50 text-blue-900 shadow-sm"
+                                                : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                                            }`}
+                                    >
+                                        <span
+                                            className={`size-2.5 rounded-full border-2 transition-colors ${isActive
+                                                    ? "bg-blue-600 border-blue-600"
+                                                    : "border-gray-300 bg-gray-300"
+                                                }`}
+                                        />
+
+                                        <span className="font-semibold uppercase tracking-tight">{size}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
 
@@ -165,7 +209,7 @@ export default function ProductDetailView({ product, relatedProducts }) {
                             <button onClick={() => setQuantity(quantity + 1)} className="px-2 text-xl text-gray-400">+</button>
                         </div>
                         <button onClick={handleAddToCart} className="flex-1 bg-[#0a1128] text-white rounded-full py-4 font-semibold hover:bg-black transition-all shadow-lg">
-                            Add to cart
+                           🛍️  Add to cart
                         </button>
                     </div>
 

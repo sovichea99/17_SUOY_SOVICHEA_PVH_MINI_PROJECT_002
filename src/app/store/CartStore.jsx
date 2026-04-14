@@ -9,12 +9,12 @@ export const useCartStore = create((set, get) => ({
       set({
         items: get().items.map((i) =>
           i.productId === product.productId
-            ? { ...i, quantity: i.quantity + 1 }
+            ? { ...i, quantity: i.quantity + product.quantity }
             : i
         ),
       });
     } else {
-      set({ items: [...get().items, { ...product, quantity: 1 }] });
+      set({ items: [...get().items, { ...product}] });
     }
   },
 

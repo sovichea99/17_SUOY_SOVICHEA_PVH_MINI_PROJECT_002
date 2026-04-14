@@ -2,7 +2,7 @@
 import { useCartStore } from '@/app/store/CartStore'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-
+import { sileo } from 'sileo';
 
 
 export default function CheckOutButton({createOrder}) {
@@ -19,6 +19,16 @@ export default function CheckOutButton({createOrder}) {
                 router.push(`/orders`);
                 clearCart();
             }
+            sileo.success({
+              title: "Order Placed!",
+              description: "Order created successfully.",
+              fill: "#171717",
+              position: "top-right",
+              styles: {
+                title: "text-white!",
+                description: "text-white/75!",
+              },
+        });
         }catch(error){
             console.log(error)
         }finally{

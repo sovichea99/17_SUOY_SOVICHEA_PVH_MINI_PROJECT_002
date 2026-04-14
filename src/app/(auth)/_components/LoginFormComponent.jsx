@@ -41,20 +41,30 @@ export default function LoginFormComponent() {
   const onSubmit = async (data) => {
     setSubmitError("");
     const result = await signInAction(data);
-    if (result.success) {
-      router.push("/?login=success");
-    }
-    const res = await signInAction(data);
 
-    if (res?.error) {
-      setSubmitError(res.error);
+    if (result?.error) {
+      setSubmitError(result.error);
       return;
+    }
+    if (result?.success) {
+      sileo.success({
+        title: "Login Successfully!",
+        description: "Your order products are ready. You have 0 items in your cart.",
+        duration: 3000,
+        position: "top-center"
+      });
+      
+      setTimeout(() => {
+        router.push("/");
+        router.refresh();
+      }, 1000);
     }
   };
   useEffect(() => {
     if (success === "true") {
       router.replace("/login");
-      sileo.success("Account created successfully!", {
+      sileo.success({
+        title: "Account created successfully!",
         description: "Please log in with your email and password.",
         duration: 6000,
       });
@@ -118,21 +128,6 @@ export default function LoginFormComponent() {
       >
         Sign in
       </Button>
-      <button
-        type="button"
-        onClick={() => {
-          sileo.success({
-            title: "Registered successfully!",
-            description: (
-              <span className="text-white font-medium! text-center">
-                Please log in with your email and password.
-              </span>
-            ),
-          });
-        }}
-      >
-        Test Toast
-      </button>
     </form>
   );
 }

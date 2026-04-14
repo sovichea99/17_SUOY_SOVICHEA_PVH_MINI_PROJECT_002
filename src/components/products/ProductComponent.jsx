@@ -131,9 +131,14 @@ export default function ProductComponent({ products, categories }) {
 
                 {filtered.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {filtered.map((product) => (
-                            <ShopCardComponent key={product.productId} product={product} />
-                        ))}
+                        {filtered.map((product) => {
+                            const categoryData = categories.find(c => c.categoryId === product.categoryId);
+                            const productWithCategory = {
+                                ...product,
+                                category: categoryData
+                            };
+                            return <ShopCardComponent key={product.productId} product={productWithCategory} />;
+                        })}
                     </div>
                 ) : (
                     <div className="border border-gray-200 border-dashed rounded-2xl bg-white p-20 flex flex-col items-center justify-center text-center">

@@ -132,7 +132,7 @@ export default function NavbarComponent() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200/80 bg-white/60 backdrop-blur-md">
+    <header className="sticky top-0 z-30 w-full border-b border-gray-200/80 bg-white/60 backdrop-blur-md">
       <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between gap-4 py-3 lg:py-4">
         <Link
           href="/"

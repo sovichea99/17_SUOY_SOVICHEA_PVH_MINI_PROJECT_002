@@ -5,6 +5,7 @@ import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
 import DeleteProductModal from "./DeleteProductModal";
 import { createProductAction, deleteProductAction, updateProductAction } from "@/action/product.action";
+import { sileo } from "sileo";  
 
 export default function ManageProductsClient({ initialProducts, categories }) {
   const [products, setProducts] = useState(initialProducts);
@@ -26,12 +27,33 @@ export default function ManageProductsClient({ initialProducts, categories }) {
         prev.map((p) => p.productId === updated.productId ? updated : p)
       );
     }
+    sileo.success({
+              title: "Product Updated!",
+              description: "Product updated successfully.",
+              fill: "#171717",
+              position: "top-right",
+              styles: {
+                title: "text-white!",
+                description: "text-white/75!",
+              },
+        });
   } else {
     const created = await createProductAction(form);
     if (created) {
       setProducts((prev) => [...prev, created]);
     }
+     sileo.success({
+              title: "Product Created!",
+              description: "Product created successfully.",
+              fill: "#171717",
+              position: "top-right",
+              styles: {
+                title: "text-white!",
+                description: "text-white/75!",
+              },
+        });
   }
+  
   setModal(null);
 };
 
@@ -40,6 +62,20 @@ export default function ManageProductsClient({ initialProducts, categories }) {
    if(deleted) {
      setProducts((prev) => prev.filter((p) => p.productId !== deleteId));
    }
+   sileo.success({
+              title: "Success",
+              description: (
+          <span>
+            Product <span className="text-red-500 font-bold">deleted</span> successfully.
+          </span>
+        ),
+              fill: "#171717",
+              position: "top-right",
+              styles: {
+                title: "text-white!",
+                description: "text-white/75!",
+              },
+        });
     setDeleteId(null);
   };
 

@@ -12,26 +12,26 @@ export default function ProductCardComponent({ product }) {
   const [hoverRating, setHoverRating] = useState(0);
   const [isPending, setIsPending] = useState(false);
   const handleStarClick = async (rating) => {
-        const previousRating = currentRating;
+    const previousRating = currentRating;
 
-        setCurrentRating(rating);
-        setIsPending(true);
+    setCurrentRating(rating);
+    setIsPending(true);
 
-        const result = await rateProductAction(product.productId, rating);
+    const result = await rateProductAction(product.productId, rating);
 
-        if (!result.success) {
-            setCurrentRating(previousRating);
-            console.error(`Rating failed: ${result.error}`);
-        }
+    if (!result.success) {
+      setCurrentRating(previousRating);
+      console.error(`Rating failed: ${result.error}`);
+    }
 
-        setIsPending(false);
-    };
+    setIsPending(false);
+  };
 
   const getValidImageUrl = (url) => {
     if (!url) return "/placeholder.png";
-    
+
     if (url === "string" || url.length < 5) {
-      return "/placeholder.png"; 
+      return "/placeholder.png";
     }
 
     if (url.startsWith("http") || url.startsWith("data:image")) {
@@ -40,10 +40,9 @@ export default function ProductCardComponent({ product }) {
 
     return "/placeholder.png";
   };
-const validSrc = getValidImageUrl(imageUrl);
+  const validSrc = getValidImageUrl(imageUrl);
   return (
     <article className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden flex flex-col">
-      {/* Image */}
       <Link href={`/products/${productId}`} className="block">
         <div className="relative aspect-square bg-gray-50 overflow-hidden">
           {imageUrl ? (
@@ -59,8 +58,6 @@ const validSrc = getValidImageUrl(imageUrl);
           )}
         </div>
       </Link>
-
-      {/* Content */}
       <div className="p-4 flex flex-col flex-1">
         <Link href={`/products/${productId}`}>
           <h3 className="font-semibold text-gray-900 text-sm leading-snug hover:text-lime-700 line-clamp-1">
@@ -73,39 +70,37 @@ const validSrc = getValidImageUrl(imageUrl);
         </p>
 
         <div className="flex items-center gap-2 mb-3">
-                            <div className="flex gap-1">
-                                {[1, 2, 3, 4, 5].map((num) => (
-                                    <button
-                                        key={num}
-                                        onMouseEnter={() => setHoverRating(num)}
-                                        onMouseLeave={() => setHoverRating(0)}
-                                        onClick={() => handleStarClick(num)}
-                                        className="text-2xl transition-all cursor-pointer"
-                                    >
-                                        <span className={
-                                            (hoverRating || currentRating) >= num
-                                                ? "text-yellow-400"
-                                                : "text-gray-300"
-                                        }>
-                                            ★
-                                        </span>
-                                    </button>
-                                ))}
-                            </div>
-                            <span className="text-gray-400 text-xs">
-                                {currentRating}
-                            </span>
-                        </div>
-
-        {/* Price, Category */}
+          <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map((num) => (
+              <button
+                key={num}
+                onMouseEnter={() => setHoverRating(num)}
+                onMouseLeave={() => setHoverRating(0)}
+                onClick={() => handleStarClick(num)}
+                className="text-2xl transition-all cursor-pointer"
+              >
+                <span className={
+                  (hoverRating || currentRating) >= num
+                    ? "text-yellow-400"
+                    : "text-gray-300"
+                }>
+                  ★
+                </span>
+              </button>
+            ))}
+          </div>
+          <span className="text-gray-400 text-xs">
+            {currentRating}
+          </span>
+        </div>
         <div className="flex items-center justify-between mt-3">
           <span className="text-lg font-semibold text-gray-900">${price}</span>
-          {category && (
-            <span className="text-xs text-lime-700 font-medium">{category}</span>
+          {category?.name && (
+            <span className="text-xs text-blue-700 p-1 rounded-lg bg-blue-50 font-medium uppercase tracking-wider">
+              {category.name}
+            </span>
           )}
         </div>
-
-        {/* Button */}
         <Link href={`/products/${productId}`}>
           <button className="mt-3 w-full bg-gray-900 hover:bg-gray-700 text-white text-sm font-medium py-2.5 rounded-xl transition">
             View Product
