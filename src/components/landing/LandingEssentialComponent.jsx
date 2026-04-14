@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
-import {
-  filterProductsByEssentialsTab,
-} from "../../data/mockData";
 import ProductCardComponent from "../ProductCardComponent";
-import { getCategoriesAction, getProductsByCategoryAction } from "@/action/product.action";
+import getProductsAction, { getCategoriesAction, getProductsByCategoryAction } from "@/action/product.action";
 
 const PAGE_SIZE = 8;
 
@@ -24,20 +21,25 @@ export default function LandingEssentialsGrid() {
     }
     loadTabs();
   }, []);
+
   useEffect(() => {
-    async function fetchNewProducts() {
+    async function fetchProducts() {
       setIsLoading(true);
       try {
-         const data = await getProductsByCategoryAction(activeTabId);
-        setProducts(data);
+        const data =
+          activeTabId === "all"
+            ? await getProductsAction()
+            : await getProductsByCategoryAction(activeTabId);
+        setProducts(data ?? []);
       } catch (error) {
         console.error("Fetch error:", error);
+        setProducts([]);
       } finally {
         setIsLoading(false);
       }
     }
 
-    fetchNewProducts();
+    fetchProducts();
   }, [activeTabId]);
 
   const visible = showAll ? products : products.slice(0, PAGE_SIZE);
@@ -50,7 +52,7 @@ export default function LandingEssentialsGrid() {
           Our skincare essentials
         </h2>
         <p className="mt-2 max-w-lg text-gray-500">
-          Filter by routine step — same mock catalog, organized for quick discovery.
+          Filter by category - browse essentials from our catalog.
         </p>
       </div>
 
@@ -60,21 +62,22 @@ export default function LandingEssentialsGrid() {
         aria-label="Product categories"
       >
         {categories.map((category) => {
-          const isSelected = activeTabId === (category.categoryId || "all");
+          const tabId = category.categoryId || "all";
+          const isSelected = activeTabId === tabId;
           return (
             <Button
               role="tab"
               aria-selected={isSelected}
-              key={category.categoryId || "all"}
+              key={tabId}
               onPress={() => {
-
-                setActiveTabId(category.categoryId || "all");
+                setActiveTabId(tabId);
                 setShowAll(false);
               }}
-              className={`rounded-full px-5 py-2.5 text-sm font-medium transition ${isSelected
+              className={`rounded-full px-5 py-2.5 text-sm font-medium transition ${
+                isSelected
                   ? "bg-lime-400 text-gray-900 shadow-sm"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+              }`}
             >
               {category.name}
             </Button>
@@ -83,11 +86,19 @@ export default function LandingEssentialsGrid() {
       </div>
 
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-        {visible.map((product, index) => (
-         <ProductCardComponent product={product} key={product.productId || product.id} />
-        ))}
+        {visible.length === 0 ? (
+          <p className="col-span-full text-center text-gray-400">
+            No products found.
+          </p>
+        ) : (
+          visible.map((product) => (
+            <ProductCardComponent
+              product={product}
+              key={product.productId || product.id}
+            />
+          ))
+        )}
       </div>
-
 
       {canLoadMore && (
         <div className="mt-12 flex justify-center">

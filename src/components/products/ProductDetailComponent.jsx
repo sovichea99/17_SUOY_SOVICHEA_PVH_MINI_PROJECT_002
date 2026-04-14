@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useCartStore } from "@/app/store/CartStore";
 import { rateProductAction } from "@/action/product.action";
 import { sileo } from "sileo";
+import Link from "next/link";
 
 export default function ProductDetailView({ product, relatedProducts }) {
     const router = useRouter();
@@ -70,6 +71,15 @@ export default function ProductDetailView({ product, relatedProducts }) {
 
     return (
         <main className="max-w-7xl mx-auto px-6 py-12">
+            <nav className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-8">
+                <Link href="/" className="hover:text-gray-900 transition-colors">Home</Link>
+                <span>/</span>
+                <Link href="/products" className="hover:text-gray-900 transition-colors">Products</Link>
+                <span>/</span>
+                <span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md">
+                    {product.name}
+                </span>
+            </nav>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
 
                 <div className="space-y-6">
@@ -184,14 +194,14 @@ export default function ProductDetailView({ product, relatedProducts }) {
                                         key={size}
                                         onClick={() => setSelectedSize(size)}
                                         className={`flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm transition-all duration-150 ${isActive
-                                                ? "border-blue-600 bg-blue-50 text-blue-900 shadow-sm"
-                                                : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                                            ? "border-blue-600 bg-blue-50 text-blue-900 shadow-sm"
+                                            : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                                             }`}
                                     >
                                         <span
                                             className={`size-2.5 rounded-full border-2 transition-colors ${isActive
-                                                    ? "bg-blue-600 border-blue-600"
-                                                    : "border-gray-300 bg-gray-300"
+                                                ? "bg-blue-600 border-blue-600"
+                                                : "border-gray-300 bg-gray-300"
                                                 }`}
                                         />
 
@@ -209,7 +219,7 @@ export default function ProductDetailView({ product, relatedProducts }) {
                             <button onClick={() => setQuantity(quantity + 1)} className="px-2 text-xl text-gray-400">+</button>
                         </div>
                         <button onClick={handleAddToCart} className="flex-1 bg-[#0a1128] text-white rounded-full py-4 font-semibold hover:bg-black transition-all shadow-lg">
-                           🛍️  Add to cart
+                            🛍️  Add to cart
                         </button>
                     </div>
 

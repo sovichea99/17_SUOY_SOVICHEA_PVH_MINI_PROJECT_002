@@ -5,6 +5,8 @@ import LandingHeroSectionComponent from "../../components/landing/LandingHeroSec
 import LandingBestSellerSectionComponent from "../../components/landing/LandingBestSellerSectionComponent";
 import LandingEssentialComponent from "../../components/landing/LandingEssentialComponent";
 import { getTopSellingProductsAction } from "@/action/product.action";
+import { Suspense } from "react";
+import LoginToast from "@/components/LoginToast";
 
 const heroStrip = products.slice(0, 3);
 export default async function Home() {
@@ -12,6 +14,9 @@ export default async function Home() {
   const bestSellers = await getTopSellingProductsAction();
   return (
     <div className="bg-[#fafafa]">
+      <Suspense>
+        <LoginToast />
+      </Suspense>
       <LandingHeroSectionComponent miniProducts={heroStrip} />
       <LandingBestSellerSectionComponent items={bestSellers} />
       <LandingEssentialComponent />

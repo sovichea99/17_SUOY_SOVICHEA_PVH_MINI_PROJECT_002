@@ -39,27 +39,18 @@ export default function LoginFormComponent() {
   });
 
   const onSubmit = async (data) => {
-    setSubmitError("");
-    const result = await signInAction(data);
+  setSubmitError("");
+  const result = await signInAction(data);
 
-    if (result?.error) {
-      setSubmitError(result.error);
-      return;
-    }
-    if (result?.success) {
-      sileo.success({
-        title: "Login Successfully!",
-        description: "Your order products are ready. You have 0 items in your cart.",
-        duration: 3000,
-        position: "top-center"
-      });
-      
-      setTimeout(() => {
-        router.push("/");
-        router.refresh();
-      }, 1000);
-    }
-  };
+  if (result?.error) {
+    setSubmitError(result.error);
+    return;
+  }
+
+  if (result?.success) {
+    router.push("/?login=success");
+  }
+};
   useEffect(() => {
     if (success === "true") {
       router.replace("/login");
