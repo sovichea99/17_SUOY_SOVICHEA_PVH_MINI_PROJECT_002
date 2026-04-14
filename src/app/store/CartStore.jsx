@@ -4,17 +4,18 @@ export const useCartStore = create((set, get) => ({
   items: [],
 
   addItem: (product) => {
+    const incomingQty = product.quantity ?? 1;
     const existing = get().items.find((i) => i.productId === product.productId);
     if (existing) {
       set({
         items: get().items.map((i) =>
           i.productId === product.productId
-            ? { ...i, quantity: i.quantity + product.quantity }
+            ? { ...i, quantity: i.quantity + incomingQty }
             : i
         ),
       });
     } else {
-      set({ items: [...get().items, { ...product}] });
+      set({ items: [...get().items, { ...product, quantity: incomingQty }] });
     }
   },
 
